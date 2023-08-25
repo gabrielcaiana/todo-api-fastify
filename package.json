@@ -1,0 +1,21 @@
+{
+  "name": "todo-fastify-api",
+  "version": "1.0.0",
+  "description": "todo api with fastify",
+  "main": "src/server.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.21.0",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  }
+}
