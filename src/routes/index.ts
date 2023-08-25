@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import { todos } from '../database'
 import { Todo } from '../types/types'
+import { TodoService } from '../services/TodoService'
 
 export const routes = (
   server: FastifyInstance,
@@ -8,12 +9,16 @@ export const routes = (
   done: () => void
 ) => {
   server.get('/todos', async (request, reply) => {
+    const todoService = new TodoService()
+    const todos = await todoService.getTodos()
+
     reply.code(200).send(todos)
   })
 
   server.get('/todos/:id', async (request, reply) => {
     const { id } = request.params as { id: string }
-    const todo = todos.find((todo) => todo.id === id)
+    const todoService = new TodoService()
+    const todo = await todoService.getTodoById(id)
 
     if (!todo) {
       reply.code(404).send()
@@ -24,9 +29,9 @@ export const routes = (
   })
 
   server.post<{ Body: Todo }>('/todos', async (request, reply) => {
-    const todo = request.body
-
-    todos.push(todo)
+    const todoBody = request.body
+    const todoService = new TodoService()
+    const todo = await todoService.createTodo(todoBody)
 
     reply.code(201).send(todo)
   })
@@ -37,15 +42,11 @@ export const routes = (
       const { id } = request.params
       const { title, completed } = request.body
 
-      const todo = todos.find((todo) => todo.id === id)
-
-      if (!todo) {
-        reply.code(404).send()
-        return
-      }
-
-      todo.title = title ?? todo.title
-      todo.completed = completed ?? todo.completed
+      const todoService = new TodoService()
+      const todo = await todoService.updateTodoById(id, {
+        title,
+        completed,
+      })
 
       reply.code(200).send(todo)
     }
@@ -55,16 +56,10 @@ export const routes = (
     '/todos/:id',
     async (request, reply) => {
       const { id } = request.params
-      const todoIndex = todos.findIndex((todo) => todo.id === id)
+      const todoService = new TodoService()
+      await todoService.deleteTodoById(id)
 
-      if (todoIndex === -1) {
-        reply.code(404).send()
-        return
-      }
-
-      todos.splice(todoIndex, 1)
-
-      reply.code(200).send()
+      reply.code(204).send()
     }
   )
 
