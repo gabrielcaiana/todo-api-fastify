@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { todos } from '../database'
+import { todos } from '../database/dbMemory'
 import { Todo } from '../types/types'
 import { TodoService } from '../services/TodoService'
 

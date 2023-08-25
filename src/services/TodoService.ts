@@ -1,4 +1,4 @@
-import { todos } from '../database'
+import { todos } from '../database/dbMemory'
 import { Todo } from '../types/types'
 
 export class TodoService {
