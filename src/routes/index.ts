@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
-import { todos } from './db'
-import { Todo } from './types'
+import { todos } from '../database'
+import { Todo } from '../types/types'
 
 export const routes = (
   server: FastifyInstance,
