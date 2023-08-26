@@ -1,47 +1,28 @@
-import { todos } from '../database/dbMemory'
+import { PrismaClient } from '@prisma/client'
 import { Todo } from '../types/types'
 
 export class TodoService {
-  todos: Todo[] = todos
+  prisma = new PrismaClient()
 
   constructor() {}
 
   async getTodos() {
-    return this.todos
+    return this.prisma.todo.findMany()
   }
 
-  async getTodoById(id: string) {
-    return this.todos.find((todo) => todo.id === id)
+  async getTodoById(id: number) {
+    return this.prisma.todo.findUnique({ where: { id } })
   }
 
   async createTodo(todo: Todo) {
-    this.todos.push(todo)
-    return todo
+    return this.prisma.todo.create({ data: todo })
   }
 
-  async updateTodoById(id: string, todo: Partial<Todo>) {
-    const todoToUpdate = this.todos.find((todo) => todo.id === id)
-
-    if (!todoToUpdate) {
-      return null
-    }
-
-    todoToUpdate.title = todo.title ?? todoToUpdate.title
-    todoToUpdate.completed = todo.completed ?? todoToUpdate.completed
-
-    return todoToUpdate
+  async updateTodoById(id: number, todo: Partial<Todo>) {
+    return this.prisma.todo.update({ where: { id }, data: todo })
   }
 
-  async deleteTodoById(id: string) {
-    const todoIndex = this.todos.findIndex((todo) => todo.id === id)
-
-    if (todoIndex === -1) {
-      return null
-    }
-
-    const todo = this.todos[todoIndex]
-    this.todos.splice(todoIndex, 1)
-
-    return todo
+  async deleteTodoById(id: number) {
+    return this.prisma.todo.delete({ where: { id: id } })
   }
 }

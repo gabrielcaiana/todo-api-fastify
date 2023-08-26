@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify'
-import { todos } from '../database/dbMemory'
 import { Todo } from '../types/types'
 import { TodoService } from '../services/TodoService'
 
@@ -16,7 +15,7 @@ export const routes = (
   })
 
   server.get('/todos/:id', async (request, reply) => {
-    const { id } = request.params as { id: string }
+    const { id } = request.params as { id: number }
     const todoService = new TodoService()
     const todo = await todoService.getTodoById(id)
 
@@ -36,14 +35,14 @@ export const routes = (
     reply.code(201).send(todo)
   })
 
-  server.put<{ Body: Partial<Todo>; Params: { id: string } }>(
+  server.put<{ Body: Partial<Todo>; Params: { id: number } }>(
     '/todos/:id',
     async (request, reply) => {
       const { id } = request.params
       const { title, completed } = request.body
 
       const todoService = new TodoService()
-      const todo = await todoService.updateTodoById(id, {
+      const todo = await todoService.updateTodoById(Number(id), {
         title,
         completed,
       })
@@ -52,12 +51,12 @@ export const routes = (
     }
   )
 
-  server.delete<{ Params: { id: string } }>(
+  server.delete<{ Params: { id: number } }>(
     '/todos/:id',
     async (request, reply) => {
       const { id } = request.params
       const todoService = new TodoService()
-      await todoService.deleteTodoById(id)
+      await todoService.deleteTodoById(Number(id))
 
       reply.code(204).send()
     }
