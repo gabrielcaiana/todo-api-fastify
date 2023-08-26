@@ -1,8 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import { Todo } from '../types/types'
+import { TodoMiddleware } from '../middleware/Todo'
 
 export class TodoService {
   prisma = new PrismaClient()
+  todoMiddleware = new TodoMiddleware()
 
   constructor() {}
 
@@ -11,6 +13,9 @@ export class TodoService {
   }
 
   async getTodoById(id: number) {
+    const exist = await this.todoMiddleware.checkTodoExists(id, this.prisma)
+    if (!exist) return
+
     return this.prisma.todo.findUnique({ where: { id } })
   }
 
@@ -19,10 +24,16 @@ export class TodoService {
   }
 
   async updateTodoById(id: number, todo: Partial<Todo>) {
+    const exist = await this.todoMiddleware.checkTodoExists(id, this.prisma)
+    if (!exist) return
+
     return this.prisma.todo.update({ where: { id }, data: todo })
   }
 
   async deleteTodoById(id: number) {
+    const exist = await this.todoMiddleware.checkTodoExists(id, this.prisma)
+    if (!exist) return
+
     return this.prisma.todo.delete({ where: { id: id } })
   }
 }

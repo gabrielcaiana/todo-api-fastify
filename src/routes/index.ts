@@ -17,7 +17,7 @@ export const routes = (
   server.get('/todos/:id', async (request, reply) => {
     const { id } = request.params as { id: number }
     const todoService = new TodoService()
-    const todo = await todoService.getTodoById(id)
+    const todo = await todoService.getTodoById(Number(id))
 
     if (!todo) {
       reply.code(404).send()
@@ -46,6 +46,11 @@ export const routes = (
         title,
         completed,
       })
+
+      if (!todo) {
+        reply.code(404).send({ error: 'Todo not found' })
+        return
+      }
 
       reply.code(200).send(todo)
     }
