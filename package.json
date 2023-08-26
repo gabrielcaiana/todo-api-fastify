@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "todo api with fastify",
   "main": "src/server.ts",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
