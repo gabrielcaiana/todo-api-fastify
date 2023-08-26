@@ -9,7 +9,7 @@ server.register(routes)
 
 const start = async () => {
   try {
-    await server.listen({ port: 3000 })
+    await server.listen(process.env.PORT || 3333)
 
     const address = server.server.address()
     const port = typeof address === 'string' ? address : address?.port
