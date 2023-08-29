@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { Todo } from '../types/types'
 import { TodoService } from '../services/TodoService'
 
-export const routes = (
+export const controller = (
   server: FastifyInstance,
   options: any,
   done: () => void

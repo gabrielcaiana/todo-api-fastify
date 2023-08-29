@@ -1,13 +1,13 @@
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 
-import { routes } from './routes'
+import { controller } from './controller'
 
 const server: FastifyInstance = Fastify({
   logger: true,
 })
 
-server.register(routes)
+server.register(controller)
 server.register(cors, { origin: '*' })
 
 const start = async () => {
