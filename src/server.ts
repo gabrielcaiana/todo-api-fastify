@@ -1,13 +1,13 @@
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 
-import { controller } from './controller'
+import { TodoController } from './constrollers/Todo'
 
 const server: FastifyInstance = Fastify({
   logger: true,
 })
 
-server.register(controller)
+server.register(TodoController)
 server.register(cors, { origin: '*' })
 
 const start = async () => {
